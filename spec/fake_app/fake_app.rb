@@ -22,6 +22,7 @@ ActiveDecoratorTestApp::Application.routes.draw do
     resources :books, :only => :show
   end
   resources :movies, :only => :show
+  resources :cities, :only => :index
 end
 
 # models
@@ -68,6 +69,15 @@ end
 # decorator fake
 class MovieDecorator; end
 
+module UpcaseDecorator
+  def upcased_name
+    name.upcase
+  end
+end
+class City < ActiveRecord::Base
+  set_decorator UpcaseDecorator
+end
+
 # controllers
 class ApplicationController < ActionController::Base
   self.append_view_path File.dirname(__FILE__)
@@ -105,6 +115,11 @@ class MoviesController < ApplicationController
     @movie = Movie.find params[:id]
   end
 end
+class CitiesController < ApplicationController
+  def index
+    @cities = City.all
+  end
+end
 
 # migrations
 class CreateAllTables < ActiveRecord::Migration
@@ -112,5 +127,6 @@ class CreateAllTables < ActiveRecord::Migration
     create_table(:authors) {|t| t.string :name}
     create_table(:books) {|t| t.string :title; t.references :author}
     create_table(:movies) {|t| t.string :name}
+    create_table(:cities) {|t| t.string :name}
   end
 end

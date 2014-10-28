@@ -36,8 +36,13 @@ module ActiveDecorator
     def decorator_for(model_class)
       return @@decorators[model_class] if @@decorators.has_key? model_class
 
-      decorator_name = "#{model_class.name}Decorator"
-      d = decorator_name.constantize
+      if model_class.respond_to?(:__decorator__)
+        d = model_class.__decorator__
+      else
+        decorator_name = "#{model_class.name}Decorator"
+        d = decorator_name.constantize
+      end
+
       unless Class === d
         d.send :include, ActiveDecorator::Helpers
         @@decorators[model_class] = d

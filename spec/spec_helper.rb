@@ -3,6 +3,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 # load Rails first
 require 'rails'
 require 'active_decorator'
+require 'active_decorator/monkey/class/set_decorator'
 # needs to load the app before loading rspec/rails => capybara
 require 'fake_app/fake_app'
 require 'rspec/rails'
@@ -18,5 +19,6 @@ RSpec.configure do |config|
     Book.delete_all
     Author.delete_all
     Movie.delete_all
+    City.delete_all
   end
 end
